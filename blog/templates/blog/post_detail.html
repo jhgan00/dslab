@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title%}post_all.html{% endblock %}
+
+{% block content %}
+<h1>{{ object }}</h1>
+{{ object.modify_dt|date:"N d, y"}}
+<p>{{ object.content }}</p>
+
+{% if object.has_previous %}
+이전 게시물: {{ object.get_previous_by_modify_dt.get_absolute_url }}
+{% endif%}
+
+{% endblock %}
