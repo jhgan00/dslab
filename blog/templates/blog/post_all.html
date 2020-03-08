@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "blog/base.html" %}
 
 {% block title%}post_all.html{% endblock %}
 
 {% block content %}
-<h1>Blog List</h1>
+<h1><i class="fas fa-blog"></i> Blog</h1>
 <br>
 <p class="message">
 	데이터사이언스 랩의 블로그입니다. 정규세션 이외의 활동(심화 스터디, 외부 대회 등)을 기록합니다.
@@ -12,23 +12,27 @@
 
 {% for post in posts %}
 	<h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-		{{ post.modify_dt|date:"N d, Y" }}
-		<p>{{ post.description }}</p>
+	<p class="post-date">{{ post.modify_dt|date:"M d, Y" }}</p>
+	<div class="hr"></div>
+	<p>{{ post.description }}</p>
+	<br>
 {%endfor %}	
 
 <br>
-<span align="center">
-	{% if page_ob.has_previous %}
-		<a href="{{ page_obj.get_previous.get_absolute_url }}">Prev</a>
+
+<div style="text-align:center;">
+	{% if page_obj.has_previous %}
+		<a href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-arrow-circle-left" aria-hidden="true"></i></a>
 	{% else %}
-		<span>Prev</span>
+		<span><i class="fas fa-arrow-circle-left" aria-hidden="true"></i></span>
 	{% endif %}
 
 	Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
 
-	{% if page_ob.has_next %}
-		<a href="{{ page_obj.get_previous.get_absolute_url }}">Next</a>
+	{% if page_obj.has_next %}
+		<a href="?page={{ page_obj.next_page_number }}"><i class="fas fa-arrow-circle-right" aria-hidden="true"></i></a>
 	{% else %}
-		<span>Next</span>
+		<span><i class="fas fa-arrow-circle-right" aria-hidden="true"></i></span>
 	{% endif %}
+</div>
 {% endblock %}

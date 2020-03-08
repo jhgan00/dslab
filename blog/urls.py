@@ -20,12 +20,13 @@ from blog.views import *
 
 app_name = 'blog'
 urlpatterns = [
-    path('', BlogPostLV.as_view(), name='index'),
-    path('post/', BlogPostLV.as_view(), name='post_list'),
-    re_path(r'^post/(?P<slug>[-\w]+)/$', BlogPostDV.as_view(), name='post_detail'),
-    path('archive/', BlogPostAV.as_view(), name='post_archive'),
-    path('archive/<int:year>/', BlogPostYAV.as_view(), name='post_archive_year'),
-    path('archive/<int:year>/<str:month>', BlogPostMAV.as_view(), name='post_archive_month'),
-    path('archive/<int:year>/<str:month>/<int:day>', BlogPostDAV.as_view(), name='post_archive_day'),
-    path('today', BlogPostTAV.as_view(), name='post_archive_today'),
+    path('', PostLV.as_view(), name='index'),
+    path('post/', PostLV.as_view(), name='post_list'),
+    re_path(r'^post/(?P<slug>[-\w]+)/$', PostDV.as_view(), name='post_detail'),
+    path('archive/', PostAV.as_view(), name='post_archive'),
+    path('archive/<int:year>/', PostYAV.as_view(), name='post_archive_year'),
+    path('archive/<int:year>/<str:month>', PostMAV.as_view(), name='post_archive_month'),
+    path('archive/<int:year>/<str:month>/<int:day>', PostDAV.as_view(), name='post_archive_day'),
+    path('today', PostTAV.as_view(), name='post_archive_today'),
+    path('tag/<str:tag>/', TaggedObjectLV.as_view(), name='post_tag_list')
 ]

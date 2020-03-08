@@ -1,14 +1,43 @@
-{% extends "base.html" %}
+{% extends "blog/base.html" %}
 
-{% block title%}post_all.html{% endblock %}
+{% block title%}blogpost_detail.html{% endblock %}
 
 {% block content %}
-<h1>{{ object }}</h1>
-{{ object.modify_dt|date:"N d, y"}}
-<p>{{ object.content }}</p>
 
-{% if object.has_previous %}
-이전 게시물: {{ object.get_previous_by_modify_dt.get_absolute_url }}
-{% endif%}
+<h3>{{ object.title }}</a></h3>
+
+<p class="post-date">{{ object.modify_dt|date:"d M Y" }}</p>
+
+<div class="hr"></div>
+
+<div class="body">{{ object.content|linebreaks }}</div>
+
+<div>
+	<b>TAGS</b> <i class="fas fa-tag"></i>
+	{% load taggit_templatetags2_tags %}
+	{% get_tags_for_object object as "tags %}
+	{% for tag in tags %}
+	<a href="{% url 'blog:post_tag_list' tag.name %}"><span class="btn btn-info btn-sm mx-1">{{ tag.name }}</span></a>
+	{% endfor %}
+</div>
+
+<div style="text-align: center;">
+	{% if object.get_previous %}
+	<a href="{{ object.get_previous_by_modify_dt.get_absolute_url }}" title="View Previous Post"><i class="fas fa-arrow-circle-left"></i> Prev</a>
+	{% else %}
+	<i class="fas fa-arrow-circle-left"></i> Prev
+	{% endif%}
+	
+	{% if object.get_next %}
+	| <a href="{{ object.get_next_by_modify_dt.get_absolute_url }}" title="View Next Post">Next <i class="fas fa-arrow-circle-right"></i></a>
+	{% else %}
+	| Next <i class="fas fa-arrow-circle-right"></i>
+	{% endif%}
+</div>
+
+
+
+
+
 
 {% endblock %}

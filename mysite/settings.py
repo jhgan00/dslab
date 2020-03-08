@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
     'lecture.apps.LectureConfig',
-    'official.apps.OfficialConfig'
+    'official.apps.OfficialConfig',
+    'taggit.apps.TaggitAppConfig',
+    'taggit_templatetags2',
+
 ]
 
 MIDDLEWARE = [
@@ -124,3 +127,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+TAGGIT_CASE_INSENSITIVE = True
+TAGGIT_LIMIT = 50

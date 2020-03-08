@@ -1,15 +1,16 @@
 from django.db import models
 from django.urls import reverse
-
+from taggit.managers import TaggableManager
 # Create your models here.
 
-class BlogPost(models.Model):
+class Post(models.Model):
 	title = models.CharField('TITLE', max_length=50)
 	slug = models.SlugField('SLUG', max_length=50, help_text = 'one word for title alias', allow_unicode=True)
 	description = models.CharField('DESCRIPTION', max_length=100, help_text = 'simple description')
 	content = models.TextField('CONTENT')
 	create_dt = models.DateTimeField('CREATE DATE', auto_now_add = True)
 	modify_dt = models.DateTimeField('MODIFY DATE', auto_now = True)
+	tags = TaggableManager(blank=True)
 
 	class Meta:
 		verbose_name = 'post'

@@ -1,0 +1,20 @@
+{% extends "blog/base.html" %}
+
+{% block title %}post_tag_list.html{% endblock %}
+
+{% block content %}
+<h3><i class="fas fa-tag"></i> {{ tagname }}</h3>
+
+<br>
+
+{% for post in object_list %}
+<header>
+	<h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+	<p class="post-date">{{ post.modify_dt|date:"M d, Y" }}</p>
+	<div class="hr"></div>
+	<p>{{ post.description }}</p>
+	<br>
+</header>
+{%endfor %}	
+
+{% endblock %}
