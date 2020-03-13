@@ -29,3 +29,10 @@ class Post(models.Model):
 
 	def get_previous(self):
 		return self.get_previous_by_modify_dt()
+
+class Comment(models.Model):
+	post = models.ForeignKey(Post, on_delete = models.CASCADE)
+	content = models.CharField('COMMENT', max_length=200)
+
+	def __str__(self):
+		return self.content

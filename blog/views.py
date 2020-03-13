@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from blog.models import Post
+from django.http import HttpResponseRedirect
 from django.views.generic import *
+
+from blog.models import Post
+from blog.forms import *
 # Create your views here.
 
 class PostLV(ListView):
@@ -11,6 +14,22 @@ class PostLV(ListView):
 
 class PostDV(DetailView):
 	model = Post
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['form'] = CommentForm(auto_id=False)
+		return context
+
+	def post(self, request, *args, **kwargs):
+		form = CommentForm(request.POST, auto_id=False)
+		if form.is_valid():
+			post = self.get_object()
+			comment = form.save(commit=False)
+			comment.post = post
+			comment.save()
+			return HttpResponseRedirect(reverse('blog:post_detail', args=[post.slug]))
+		else:
+			return HttpResponseRedirect(reverse('blog:post_detail', args=[post.slug]))
 
 class PostAV(ArchiveIndexView):
 	model = Post

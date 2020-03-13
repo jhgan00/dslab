@@ -21,6 +21,26 @@
 	{% endfor %}
 </div>
 
+<br>
+
+<h4>Comments</h4>
+<div class="hr"></div>
+
+<div>
+	<form action="." method="post">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Comment">
+	</form>
+	
+	<br><br>
+
+	<ul>
+		{% for comment in object.comment_set.all %}
+		<li>{{ comment.content }}</li>
+		{% endfor %}
+	</ul>
+</div>
+
 <div style="text-align: center;">
 	{% if object.get_previous %}
 	<a href="{{ object.get_previous_by_modify_dt.get_absolute_url }}" title="View Previous Post"><i class="fas fa-arrow-circle-left"></i> Prev</a>
