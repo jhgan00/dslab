@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic import *
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from blog.models import Post
 from blog.forms import *
@@ -12,6 +14,7 @@ class PostLV(ListView):
 	context_object_name = 'posts'
 	paginate_by = 2
 
+@method_decorator(login_required, name="post")
 class PostDV(DetailView):
 	model = Post
 
@@ -21,15 +24,23 @@ class PostDV(DetailView):
 		return context
 
 	def post(self, request, *args, **kwargs):
-		form = CommentForm(request.POST, auto_id=False)
-		if form.is_valid():
-			post = self.get_object()
-			comment = form.save(commit=False)
-			comment.post = post
-			comment.save()
-			return HttpResponseRedirect(reverse('blog:post_detail', args=[post.slug]))
+		if 'comment' in self.request.POST:
+			form = CommentForm(request.POST, auto_id=False)
+			if form.is_valid():
+				post = self.get_object()
+				comment = form.save(commit=False)
+				comment.post = post
+				comment.save()
+				return HttpResponseRedirect(reverse('blog:post_detail', args=[post.slug]))
+			else:
+				return render(request, self.template_name, {'form':form})
+
 		else:
-			return HttpResponseRedirect(reverse('blog:post_detail', args=[post.slug]))
+			post = self.get_object()
+			post_like, post_like_created = post.like_set.get_or_create(user=request.user)
+			if not post_like_created:
+				post_like.delete()
+			return redirect(post.get_absolute_url())
 
 class PostAV(ArchiveIndexView):
 	model = Post

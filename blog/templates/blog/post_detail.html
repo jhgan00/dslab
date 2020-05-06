@@ -24,38 +24,49 @@
 <br>
 
 <h4>Comments</h4>
+
+<form action="." method="post">{% csrf_token %}
+	<button class='btn'>
+		{% if user_likes %}
+		<i class="fas fa-heart" style="color:red; font-size: 17px;"></i>
+		{% else %}
+		<i class="far fa-heart" style="color:red; font-size: 17px;"></i>
+		{% endif %}
+	</button>
+	<span class="small">
+		{% if user_likes %}
+		{{ user }} 님 외 {{ object.like_count }}명이 이 게시물을 좋아합니다
+		{% else %}
+		{{ object.like_set.first.user }} 님 외 {{ object.like_count }}명이 이 게시물을 좋아합니다
+		{% endif %}
+	</span>
+</form>
+
 <div class="hr"></div>
 
 <div>
-	<form action="." method="post">{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="Comment">
+	<form action="." method="post">{% csrf_token %} {{ form.as_p }}
+	<input type="submit" name="comment" value="Post as {{ user }}" class="btn btn-sm btn-info" style="float:right;">
 	</form>
-	
 	<br><br>
+</div>
 
+<div>
 	<ul>
 		{% for comment in object.comment_set.all %}
-		<li>{{ comment.content }}</li>
+		<li>
+			<div class="comment">
+				<header>
+					<span>{{ comment.owner }}</span>
+					<span class="post-date">{{ comment.modify_dt|timesince }} ago</span>
+				</header>
+				<body>{{ comment.content|linebreaks }}</body>
+			</div>
+			<br/>
+		</li>
 		{% endfor %}
 	</ul>
 </div>
-
-<div style="text-align: center;">
-	{% if object.get_previous %}
-	<a href="{{ object.get_previous_by_modify_dt.get_absolute_url }}" title="View Previous Post"><i class="fas fa-arrow-circle-left"></i> Prev</a>
-	{% else %}
-	<i class="fas fa-arrow-circle-left"></i> Prev
-	{% endif%}
-	
-	{% if object.get_next %}
-	| <a href="{{ object.get_next_by_modify_dt.get_absolute_url }}" title="View Next Post">Next <i class="fas fa-arrow-circle-right"></i></a>
-	{% else %}
-	| Next <i class="fas fa-arrow-circle-right"></i>
-	{% endif%}
-</div>
-
-
 
 
 
